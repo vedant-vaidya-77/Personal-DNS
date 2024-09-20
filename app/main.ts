@@ -4,7 +4,7 @@ import { TDNSHeader, OpCode, ResponseCode, DNSHeader } from "./dns/header"
 const defaultHeaders: TDNSHeader = {
 	id: 1234,
 	qr: 1,
-	// opcode: OpCode.STANDARD_QUERY,
+	opcode: OpCode.STANDARD_QUERY,
 	aa: 0,
 	tc: 0,
 	rd: 0,
