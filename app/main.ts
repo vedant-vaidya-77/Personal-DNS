@@ -1,5 +1,6 @@
 import * as dgram from "dgram";
 import { TDNSHeader, OpCode, ResponseCode, DNSHeader } from "./dns/header"
+import {DNSQuestion, DNSClass, DNSType, IDNSQuestion } from "./dns/question"
 
 const defaultHeaders: TDNSHeader = {
 	id: 1234,
@@ -17,6 +18,20 @@ const defaultHeaders: TDNSHeader = {
 	arcount: 0,
 };
 
+const defaultQuestion: IDNSQuestion = {
+	name: 'codecrafters.io',
+	classCode: DNSClass.IN,
+	type: DNSType.A,
+};
+
+const defaultAns: IDNSans = {
+	name: "vedant.io",
+	className: DNSClass.IN,
+	type: DNSType.A,
+	ttl: 60,
+	data: "\x08\x08\x08\x08"
+}
+
 const udpSocket: dgram.Socket = dgram.createSocket("udp4"); //Ipv4
 
 udpSocket.bind(2053, "127.0.0.1");
@@ -25,11 +40,12 @@ udpSocket.on("message", (data: Buffer, remoteAddr: dgram.RemoteInfo) => {
     try { 
         console.log(`Received data from ${remoteAddr.address}:${remoteAddr.port}`);
 
-        const header = DNSHeader.write(defaultHeaders);
-
+        const header = DNSHeader.write({...defaultHeaders, qdcount: 1});
+        const question = DNSQuestion.write([defaultQuestion])
+        const ans = DNSanswere.write([defaultAns])
         // const response = Buffer.from("");
         // const response = header;
-        const response = Buffer.concat([header]);
+        const response = Buffer.concat([header, question, ans]);
 
         udpSocket.send(response, remoteAddr.port, remoteAddr.address);
 

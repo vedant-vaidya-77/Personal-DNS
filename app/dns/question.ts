@@ -1,4 +1,4 @@
-export enum DNSQuestionType{
+export enum DNSType{
 	A = 1;
 	NS = 2;
 }
@@ -10,7 +10,7 @@ export enum DNSClass{
 
 export interface IDNSQuestion{
 	name : string;
-	type : DNSQuestionType;
+	type : DNSType;
 	classCode : DNSClass;
 }
 
